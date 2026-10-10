@@ -1,0 +1,8 @@
+{
+  "name": "FairShare",
+  "description": "An intelligent task-distribution tool that calculates and visualizes balanced, fair workloads for student group projects.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
