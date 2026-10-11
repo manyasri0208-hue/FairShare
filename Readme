@@ -1,0 +1,135 @@
+# FairShare
+
+**FairShare helps student teams divide project work fairly.**
+
+Group projects often split unevenly: one member ends up spending hours on extra work while another finishes in minutes, because skills, task difficulty and availability differ and nobody can see the workload. FairShare is a web application that designates tasks and assigns an equal share of responsibility, so that every member's contribution is visible and balanced.
+
+Built for **CIE Spark 2026** by Manyasri, Swetha and Disha (CSE, Section L).
+
+---
+
+## The problem
+
+Our survey of 10 students and about 10 in-depth interviews showed that:
+
+- 6 of 10 students have had difficulty dividing project work fairly.
+- 8 of 10 felt they were given more work than others at least sometimes.
+- Teams split work over WhatsApp, which cannot see skills, workload or deadlines.
+- The member who ends up doing the extra work can spend about 4 hours, while a member who does little finishes in about 20 minutes.
+
+## Features
+
+- **Task designation:** add project tasks with a title, description and the skill each one requires.
+- **AI complexity estimation:** Gemini estimates each task's complexity (Low, Medium or High), the hours it is likely to take, and a short reason a student can understand.
+- **Fallback estimation:** if the AI key is missing or the AI call fails, a rule-based estimate keeps the app working. Each estimate is labelled with its source (`ai` or `heuristic`).
+- **Fairness-first design:** responsibilities are meant to be spread evenly across members, with the team approving the final split.
+- **Friendly interface:** responsive layout, smooth animations and light celebration effects.
+
+## Tech stack
+
+| Layer | Technology |
+| --- | --- |
+| Front end | React 19, Vite, Tailwind CSS 4 |
+| UI extras | Motion (animations), Lucide (icons), canvas-confetti |
+| Server | Node.js, Express, TypeScript (run with `tsx`) |
+| AI | Google Gemini via the `@google/genai` SDK |
+
+## Getting started
+
+**Prerequisites:** Node.js 18 or later and a Gemini API key from [Google AI Studio](https://aistudio.google.com/).
+
+1. Clone the repository and install dependencies:
+
+   ```bash
+   git clone https://github.com/manyasri0208-hue/FairShare.git
+   cd FairShare
+   npm install
+   ```
+
+2. Create your environment file from the example:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Then open `.env` and set your key:
+
+   ```
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+   The key is used only on the server and is never sent to the browser. The app still runs without it, using the rule-based estimate instead.
+
+3. Start the app:
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Starts the Express server with the Vite dev middleware on port 3000 |
+| `npm run build` | Builds the front end into `dist/` |
+| `npm start` | Starts the server (set `NODE_ENV=production` to serve the built `dist/` folder) |
+| `npm run lint` | Type-checks the project with TypeScript |
+| `npm run clean` | Removes `dist/` and `server.js` |
+
+## API
+
+### `POST /api/estimate-complexity`
+
+Estimates how hard a task is.
+
+**Request body**
+
+```json
+{
+  "title": "Build login page",
+  "description": "Email and password form with validation",
+  "requiredSkill": "Frontend"
+}
+```
+
+`title` is required. `description` and `requiredSkill` are optional.
+
+**Response**
+
+```json
+{
+  "complexity": "Medium",
+  "estimatedHours": 5,
+  "reasoning": "Feature development with form validation and error states.",
+  "source": "ai"
+}
+```
+
+- `complexity` is `Low`, `Medium` or `High`.
+- `estimatedHours` is a whole number between 1 and 30.
+- `source` is `ai` when Gemini answered and `heuristic` when the fallback was used.
+
+## Project structure
+
+```
+FairShare/
+├── src/              # React front end
+├── server.ts         # Express server and Gemini estimation endpoint
+├── index.html        # App entry point
+├── vite.config.ts    # Vite configuration
+├── .env.example      # Template for environment variables
+└── package.json
+```
+
+## Roadmap
+
+- Automatic fair-split suggestion based on skills, availability and deadlines
+- Fairness score and workload chart per member
+- Team approval step before a plan is locked
+- Progress tracking by task status
+
+## Team
+
+Manyasri, Swetha and Disha, CSE Section L. Work on the project is split equally across all three members.
